@@ -2,17 +2,28 @@ import customtkinter
 import pygame
 
 class MyTimer:
+
+    #Konstruktor App:
     def __init__(self):
         self.app = customtkinter.CTk()
         self.app.geometry("170x155")
         self.app.title("Timer")
+    #für sound 
+        pygame.mixer.init()
+        self.ton1 = input("gigidelaromusic-celestial-chime-soft-short-450958.wav")
+        self.ton2 = input("miraclei-sample_confirm_accept01_kofi_by_miraclei-364181.wav")
+        pygame.mixer.music.load(self.ton1)
+        pygame.mixer.music.load(self.ton2)
 
+
+    #Variablen:
         self.is_running = False
-        self.z = 10
+        self.z = 11
         self.p = 6
         self.y = 1
-        
 
+        
+    #Buttons:
         self.Zeitfenster = customtkinter.CTkLabel(self.app,font=("Arial", 40), text=":", fg_color="transparent",width=100, height=50, corner_radius=50)
         self.Zeitfenster.grid(row=0, column=0, columnspan=2, padx=30, pady=10)
 
@@ -20,7 +31,6 @@ class MyTimer:
            # self.app, text="Time", width=20, height=20,corner_radius=30,
            # font=("Arial", 16,)) 
         #self.NewTimebutton.grid(row=3, column=1, padx=10, pady=10)
-
 
         self.Resetbutton = customtkinter.CTkButton(
             self.app, text="Reset", width=20, height=20,corner_radius=30,
@@ -39,24 +49,24 @@ class MyTimer:
         self.pausebutton.grid(row=2, column=1, padx=10, pady=3)
 
 
-
+    #Methoden:
     def count(self): 
-            
-            if self.z > 0:
-                self.z -= 1
-                self.Zeitfenster.configure(text=str(self.z))
-                self.y = self.Zeitfenster.after(1000, self.count)
-                self.breaktime()
+        if self.z > 0:
+            self.z -= 1
+            self.Zeitfenster.configure(text=str(self.z))
+            self.y = self.Zeitfenster.after(1000, self.count)
+            self.p = 6
+            self.breaktime()
                         
 
     def breaktime(self):
-      
         if self.z == 0 and self.p > 0:
-           
+            pygame.mixer.music.play(self.ton2)
             self.p -= 1
             self.Zeitfenster.configure(text=str(self.p))
             self.y =self.Zeitfenster.after(1000, self.breaktime)
             if self.p == 0:
+                self.z = 11
                 self.count()
             
     # falls ich diese Funktion später noch einbauen will 
@@ -65,15 +75,12 @@ class MyTimer:
 
 
     def stop(self):
-        
         self.Zeitfenster.configure(text=str(self.z))
         self.Zeitfenster.after_cancel(self.y)
-
 
         
     def buildApp(self):
         self.app.mainloop()
-
 
 
 countdown = MyTimer()
